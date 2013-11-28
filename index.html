@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
    <head>
-      <title>Map with valid credentials</title>
+      <title>Near Me Now</title>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
       <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
       <script type="text/javascript">
@@ -9,7 +9,7 @@
             
       function getMap()
       {
-          map = new Microsoft.Maps.Map(document.getElementById('myMap'), {credentials: 'Ajq-7x-U0c2VIR9WJxy3wXHPpR_ZwRdkjzT0PSvyhKah94KDRGk1FPkY85hiFW5U'});
+          map = new Microsoft.Maps.Map(document.getElementById('myMap'), {credentials: 'Ajq-7x-U0c2VIR9WJxy3wXHPpR_ZwRdkjzT0PSvyhKah94KDRGk1FPkY85hiFW5U', showDashboard: false, enableSearchLogo: false, enableClickableLogo: false, mapTypeId : Microsoft.Maps.MapTypeId.road});
           map.entities.clear();
           var geoLocationProvider = new Microsoft.Maps.GeoLocationProvider(map);
           geoLocationProvider.getCurrentPosition({ showAccuracyCircle: true, updateMapView: true });
