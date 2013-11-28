@@ -10,6 +10,9 @@
       function getMap()
       {
           map = new Microsoft.Maps.Map(document.getElementById('myMap'), {credentials: 'Ajq-7x-U0c2VIR9WJxy3wXHPpR_ZwRdkjzT0PSvyhKah94KDRGk1FPkY85hiFW5U'});
+          map.entities.clear();
+          var geoLocationProvider = new Microsoft.Maps.GeoLocationProvider(map);
+          geoLocationProvider.getCurrentPosition({ showAccuracyCircle: true, updateMapView: true });
       }   
       </script>
    </head>
