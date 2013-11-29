@@ -16,7 +16,29 @@
       }   
       </script>
    </head>
-   <body onload="getMap();">
-      <div id='myMap' style="position:relative; width:400px; height:400px;"></div>
+   <body onload="getMap();FB.login();">
+     <div id="fb-root"></div>
+     <script>
+       window.fbAsyncInit = function() {
+       // init the FB JS SDK
+       FB.init({
+       appId      : '378209865646769',
+       status     : true,
+       xfbml      : true
+       });
+       
+       // Additional initialization code such as adding Event Listeners goes here
+       };
+       
+       // Load the SDK asynchronously
+       (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "//connect.facebook.net/en_US/all.js";
+       fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+     </script>
+     <div id='myMap' style="position:relative; width:400px; height:400px;"></div>
    </body>
 </html>
