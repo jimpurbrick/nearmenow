@@ -3,7 +3,7 @@
     function getMap()
     {
         map = new Microsoft.Maps.Map(
-	    document.getElementById('myMap'), {
+	    document.getElementById('bing-map'), {
 		credentials: 'Ajq-7x-U0c2VIR9WJxy3wXHPpR_ZwRdkjzT0PSvyhKah94KDRGk1FPkY85hiFW5U', 
 		showDashboard: false, 
 		enableSearchLogo: false, 
