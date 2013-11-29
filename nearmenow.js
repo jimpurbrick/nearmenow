@@ -14,8 +14,21 @@
         var geoLocationProvider = new Microsoft.Maps.GeoLocationProvider(map);
         geoLocationProvider.getCurrentPosition({ showAccuracyCircle: true, updateMapView: true });
 	return map;
-    }   
-    
+    }
+
+    function setPushPin(map, event) {
+        try {
+            var pushpinContent = "<div style='font-size:12px;font-width:bold;border:solid 1px;width:100px;height:100px;background-image:url(" + event.cover.source + ");background-size:100px 100px;'>" + event.name + "</div>";
+            var pushpinOptions =  {width: null, height: null, htmlContent: pushpinContent};
+            var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(
+                event.venue.latitude,
+                event.venue.longitude),
+                pushpinOptions
+            );
+            map.entities.push(pushpin);
+        } catch (err) {}   
+    }
+
     window.fbAsyncInit = function() {
 	
 	var map = null;
@@ -37,19 +50,9 @@
 
 		    // Loop through events adding pushpins.
 		    for(var i = 0; i < response.events.data.length; ++i) {
-			var event = response.events.data[i];
-                        try {
-                            var pushpinContent = "<div style='font-size:12px;font-width:bold;border:solid 1px;width:100px;height:100px;background-image:url(" + event.cover.source + ");background-size:100px 100px;'>" + event.name + "</div>";
-                            var pushpinOptions =  {width: null, height: null, htmlContent: pushpinContent};
-                            var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(
-    		                event.venue.latitude,
-		                event.venue.longitude), 
-		                pushpinOptions
-                            );
-	    		    map.entities.push(pushpin);
-                        } catch (err) {}
-		    }
-		});
+		        setPushPin(map, response.events.data[i]);
+                    }
+                });
             } else {
 		console.log('User cancelled login or did not fully authorize.');
             }
