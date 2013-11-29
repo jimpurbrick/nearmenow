@@ -76,27 +76,28 @@
                         } catch (err) {}
                     }
                 });*/
+                // Get check in data.
+                var xmlhttp = new XMLHttpRequest(); // TODO: IE5, IE6? ;-)
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        var response = xmlhttp.responseText.substr(9);
+                        var data = JSON.parse(response);
+                        map = getMap();
+                        for(var user in data) {
+                            //console.log(data[user].p_url);
+                            var userData = data[user];
+                            try {
+                                setPushPin(map, userData[time],
+                                           userData[p_name], userData[pic], userData[lat], userData[lon]);
+                            } catch (err) {}
+                        }
+                    }
+                };
             } else {
 		console.log('User cancelled login or did not fully authorize.');
             }
         }, {scope: "user_events"});
 
-	// Get check in data.
-	var xmlhttp = new XMLHttpRequest(); // TODO: IE5, IE6? ;-)
-	xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-		var response = xmlhttp.responseText.substr(9);
-		var data = JSON.parse(response);
-		for(var user in data) {
-		    //console.log(data[user].p_url);
-                    var userData = data[user];
-                    try {
-                        setPushPin(getMap(), userData[time],
-                                   userData[p_name], userData[pic], userData[lat], userData[lon]);
-                    } catch (err) {}
-		}
-            }
-	};
 	xmlhttp.open("GET", "https://www.martinoluca.sb.facebook.com/nearmenow/friends/", true);
 	xmlhttp.send();
     };
