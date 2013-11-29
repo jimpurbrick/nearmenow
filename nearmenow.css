@@ -11,6 +11,13 @@
     background-size:96px 96px;
 }
 
+.pin span
+{
+    position:absolute;
+    bottom:0;
+    right:0;
+}
+
 .map
 {
     style:position:relative;
