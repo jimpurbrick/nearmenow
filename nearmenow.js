@@ -23,7 +23,7 @@
             var time1hour = 60 * 60 * 1000;
             if (startTime < now + time1hour) {
                 var timestamp = (startTime < now)?
-                    (new Date(now-startTime)).getMinutes() + " ago" :
+                    (new Date(now-startTime)).getMinutes() + " minutes ago" :
                     "In " + (new Date(startTime-now)).getMinutes() + " minutes"; 
                 var pushpinContent = "<div class='pin' style='background-image:url(" + picture + ");'>" 
                     + name + "<span>" + timestamp + "</span></div>";
@@ -73,8 +73,8 @@
 				       //console.log(data[user].p_url);
 				       var userData = data[user];
 				       try {
-					   setPushPin(map, userData[time],
-						      userData[p_name], userData[pic], userData[lat], userData[lon]);
+					   setPushPin(map, userData.time,
+						      userData.p_name, userData.pic, userData.lat, userData.lon);
 				       } catch (err) {}
 				   }
 			       }
