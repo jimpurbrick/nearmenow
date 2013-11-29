@@ -16,19 +16,17 @@
 	return map;
     }
 
-    function setPushPin(map, event) {
+    function setPushPin(map, time, name, picture, latitude, longitude) {
         try {
-            var startTime = (new Date(event.start_time)).getTime();
+            var startTime = (new Date(time)).getTime();
             var now = (new Date()).getTime();
             var time1hour = 60 * 60 * 1000;
             if (startTime < now + time1hour) {
                 var timestamp = (startTime < now)? "Now" : "In " + (new Date(startTime-now)).getMinutes() + " minutes"; 
                 var pushpinContent = "<div class='pin' style='background-image:url(" + 
-		    event.cover.source + ");'>" + event.name + "<span>" + timestamp + "</span></div>";
+		    picture + ");'>" + name + "<span>" + timestamp + "</span></div>";
 	        var pushpinOptions =  {width: null, height: null, htmlContent: pushpinContent};
-                var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(
-                    event.venue.latitude,
-                    event.venue.longitude),
+                var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(latitude, longitude),
                     pushpinOptions
                 );
                 map.entities.push(pushpin);
@@ -57,7 +55,23 @@
 
 		    // Loop through events adding pushpins.
 		    for(var i = 0; i < response.events.data.length; ++i) {
-		        setPushPin(map, response.events.data[i]);
+                        var event = response.events.data[i];
+                        try {
+		            setPushPin(map, event.start_time, event.name, event.cover.source, event.venue.latitude, event.venue.longitude);
+                        } catch (err) {}
+                    }
+                });
+                FB.api('/me?fields=friends.limit(20).fields(checkins.limit(10).fields(created_time,coordinates),picture)', function(response) {
+                    map = getMap();
+                    // Loop through friends' checkins
+                    for (var i = 0; i < response.friends.data.length; i++) {
+                        try {
+                            for (var j = 0; j < response.friends.data[i].checkins.data; j++) {
+                                var coordinates = response.friends.data[i].checkins.data[j].coordinates;
+                                var createdTime = (new Date(response.friends.data[i].checkins.data[j].created_time)).getTime();
+
+                            }
+                        } catch (err) {}
                     }
                 });
             } else {
