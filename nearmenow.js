@@ -22,9 +22,11 @@
             var now = (new Date()).getTime();
             var time1hour = 60 * 60 * 1000;
             if (startTime < now + time1hour) {
-                var timestamp = (startTime < now)? "Now" : "In " + (new Date(startTime-now)).getMinutes() + " minutes"; 
-                var pushpinContent = "<div class='pin' style='background-image:url(" + 
-		    picture + ");'>" + name + "<span>" + timestamp + "</span></div>";
+                var timestamp = (startTime < now)?
+                    (new Date(now-startTime)).getMinutes() + " ago" :
+                    "In " + (new Date(startTime-now)).getMinutes() + " minutes"; 
+                var pushpinContent = "<div class='pin' style='background-image:url(" + picture + ");'>" 
+                    + name + "<span>" + timestamp + "</span></div>";
 	        var pushpinOptions =  {width: null, height: null, htmlContent: pushpinContent};
                 var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(latitude, longitude),
                     pushpinOptions
@@ -61,6 +63,7 @@
                         } catch (err) {}
                     }
                 });
+                /*
                 FB.api('/me?fields=friends.limit(20).fields(checkins.limit(10).fields(created_time,coordinates),picture)', function(response) {
                     map = getMap();
                     // Loop through friends' checkins
@@ -73,7 +76,7 @@
                             }
                         } catch (err) {}
                     }
-                });
+                });*/
             } else {
 		console.log('User cancelled login or did not fully authorize.');
             }
