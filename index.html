@@ -16,7 +16,7 @@
       }   
       </script>
    </head>
-   <body onload="getMap();FB.login();">
+   <body onload="getMap();">
      <div id="fb-root"></div>
      <script>
        window.fbAsyncInit = function() {
@@ -28,6 +28,16 @@
        });
        
        // Additional initialization code such as adding Event Listeners goes here
+       FB.login(function(response) {
+       if (response.authResponse) {
+       console.log('Welcome!  Fetching your information.... ');
+       FB.api('/me?fields=events.until(1384977600).limit(25).fields(venue)', function(response) {
+       console.log("Events" + response.events);
+       });
+       } else {
+       console.log('User cancelled login or did not fully authorize.');
+       }
+       }, {scope: "user_events");
        };
        
        // Load the SDK asynchronously
