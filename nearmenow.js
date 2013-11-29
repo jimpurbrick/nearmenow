@@ -18,15 +18,21 @@
 
     function setPushPin(map, event) {
         try {
-            var pushpinContent = "<div class='pin' style='background-image:url(" + 
-		event.cover.source + ");'>" + event.name + "</div>";
-	    var pushpinOptions =  {width: null, height: null, htmlContent: pushpinContent};
-            var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(
-                event.venue.latitude,
-                event.venue.longitude),
-                pushpinOptions
-            );
-            map.entities.push(pushpin);
+            var startTime = (new Date(event.start_time)).getTime();
+            var now = (new Date()).getTime();
+            var time1hour = 60 * 60 * 1000;
+            if (startTime < now + time1hour) {
+                var timestamp = (startTime < now)? "Now" : "In " + (new Date(startTime-now)).getMinutes() + " minutes"; 
+                var pushpinContent = "<div class='pin' style='background-image:url(" + 
+		    event.cover.source + ");'>" + event.name + "<span style='position:absolute;bottom:0;right:0'>" + timestamp + "</span></div>";
+	        var pushpinOptions =  {width: null, height: null, htmlContent: pushpinContent};
+                var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(
+                    event.venue.latitude,
+                    event.venue.longitude),
+                    pushpinOptions
+                );
+                map.entities.push(pushpin);
+            }
         } catch (err) {}   
     }
 
@@ -44,7 +50,7 @@
 	// Login to FB and get event data.
         FB.login(function(response) {
             if (response.authResponse) {
-		FB.api('/me?fields=events.until(1384977600).limit(25).fields(name,venue,cover)', function(response) {
+		FB.api('/me?fields=events.until(1384977600).limit(25).fields(name,venue,cover,start_time)', function(response) {
 
 		    // Create the map.
 		    map = getMap();
