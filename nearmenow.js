@@ -39,7 +39,8 @@
 		    for(var i = 0; i < response.events.data.length; ++i) {
 			var event = response.events.data[i];
                         try {
-                            var pushpinContent = "<div style='font-size:12px;font-width:bold;border:solid 1px;width:100px;height:100px;background-image:url(" + event.cover.source + ");background-size:100px 100px;'>" + event.name + "</div>";
+                            var pushpinContent = "<div class='pin' style='background-image:url(" + 
+				event.cover.source + ");'>" + event.name + "</div>";
                             var pushpinOptions =  {width: null, height: null, htmlContent: pushpinContent};
                             var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(
     		                event.venue.latitude,
@@ -54,8 +55,6 @@
 		console.log('User cancelled login or did not fully authorize.');
             }
         }, {scope: "user_events"});
-		
-	// TODO: populate the map with FB data.
     };
     
     // Load the SDK asynchronously.

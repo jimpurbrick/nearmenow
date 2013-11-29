@@ -1,0 +1,12 @@
+.pin
+{
+    color:white;
+    font-size:12px;
+    font-width:bold;
+    font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
+    border:solid 1px;
+    border-color:black;
+    width:96px;
+    height:96px;
+    background-size:96px 96px;
+}
