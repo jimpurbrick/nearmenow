@@ -51,10 +51,9 @@
         FB.login(function(response) {
             if (response.authResponse) {
 		FB.api('/me?fields=events.since(1385564000).limit(25).fields(name,venue,cover,start_time)', function(response) {
-
 		    // Create the map.
 		    map = getMap();
-
+		   
 		    // Loop through events adding pushpins.
 		    for(var i = 0; i < response.events.data.length; ++i) {
                         var event = response.events.data[i];
@@ -81,6 +80,20 @@
 		console.log('User cancelled login or did not fully authorize.');
             }
         }, {scope: "user_events"});
+
+	// Get check in data.
+	var xmlhttp = new XMLHttpRequest(); // TODO: IE5, IE6? ;-)
+	xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+		var response = xmlhttp.responseText.substr(9);
+		var data = JSON.parse(response);
+		for(var user in data) {
+		    console.log(data[user].p_url);
+		}
+            }
+	};
+	xmlhttp.open("GET", "https://www.martinoluca.sb.facebook.com/nearmenow/friends/", true);
+	xmlhttp.send();
     };
     
     // Load the SDK asynchronously.
