@@ -26,21 +26,37 @@
             status     : true,
             xfbml      : true
         });
-	
+
 	// Login to FB and get event data.
         FB.login(function(response) {
             if (response.authResponse) {
 		FB.api('/me?fields=events.until(1384977600).limit(25).fields(venue)', function(response) {
-                    console.log("Events" + response.events);
+
+		    // Create the map.
+		    map = getMap();
+
+		    // Loop through events adding pushpins.
+		    for(var i = 0; i < response.events.data.length; ++i) {
+			var obj = response.events.data[i];
+			for(var key in obj) {
+			    var attrName = key;
+			    var attrValue = obj[key];
+			    console.log("Name " + attrName + "Value");
+			}
+
+			var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(
+			    obj.venue.latitude,
+			    obj.venue.longitude, 
+			    null
+			));
+			map.entities.push(pushpin);
+		    }
 		});
             } else {
 		console.log('User cancelled login or did not fully authorize.');
             }
         }, {scope: "user_events"});
-	
-	// Create the map.
-	map = getMap();
-	
+		
 	// TODO: populate the map with FB data.
     };
     
