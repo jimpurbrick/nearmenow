@@ -10,3 +10,10 @@
     height:96px;
     background-size:96px 96px;
 }
+
+.map
+{
+    style:position:relative;
+    width:960px;
+    height:960px;
+}
