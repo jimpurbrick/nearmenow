@@ -20,33 +20,33 @@
      <div id="fb-root"></div>
      <script>
        window.fbAsyncInit = function() {
-       // init the FB JS SDK
-       FB.init({
-       appId      : '378209865646769',
-       status     : true,
-       xfbml      : true
-       });
+         // init the FB JS SDK
+         FB.init({
+           appId      : '378209865646769',
+           status     : true,
+           xfbml      : true
+         });
        
-       // Additional initialization code such as adding Event Listeners goes here
-       FB.login(function(response) {
-       if (response.authResponse) {
-       console.log('Welcome!  Fetching your information.... ');
-       FB.api('/me?fields=events.until(1384977600).limit(25).fields(venue)', function(response) {
-       console.log("Events" + response.events);
-       });
-       } else {
-       console.log('User cancelled login or did not fully authorize.');
-       }
-       }, {scope: "user_events");
+         // Additional initialization code such as adding Event Listeners goes here
+         FB.login(function(response) {
+           if (response.authResponse) {
+             console.log('Welcome!  Fetching your information.... ');
+               FB.api('/me?fields=events.until(1384977600).limit(25).fields(venue)', function(response) {
+                 console.log("Events" + response.events);
+               });
+           } else {
+             console.log('User cancelled login or did not fully authorize.');
+           }
+         }, {scope: "user_events"});
        };
        
        // Load the SDK asynchronously
        (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       if (d.getElementById(id)) {return;}
-       js = d.createElement(s); js.id = id;
-       js.src = "//connect.facebook.net/en_US/all.js";
-       fjs.parentNode.insertBefore(js, fjs);
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         fjs.parentNode.insertBefore(js, fjs);
        }(document, 'script', 'facebook-jssdk'));
      </script>
      <div id='myMap' style="position:relative; width:400px; height:400px;"></div>
