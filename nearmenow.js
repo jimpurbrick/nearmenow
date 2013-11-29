@@ -88,7 +88,12 @@
 		var response = xmlhttp.responseText.substr(9);
 		var data = JSON.parse(response);
 		for(var user in data) {
-		    console.log(data[user].p_url);
+		    //console.log(data[user].p_url);
+                    var userData = data[user];
+                    try {
+                        setPushPin(getMap(), userData[time],
+                                   userData[p_name], userData[pic], userData[lat], userData[lon]);
+                    } catch (err) {}
 		}
             }
 	};
