@@ -36,12 +36,42 @@
             }
         } catch (err) {}   
     }
+    
+    function requestPages(request, field, callback) {
+	FB.api(request, function(response) {
+	    processPage(response[field], callback);
+	});
+    }
+
+    function processPage(response, callback) {
+	try {
+	    for (var i = 0; i < response.data.length; ++i) {
+		try {
+		    callback(response.data[i]);
+		} catch (err) {}
+	    }
+	    requestNextPage(response.paging.next, callback); // TODO: JS TCO? ;-)
+	} catch(err) {
+	}
+    }
+
+    function requestNextPage(request, callback) {
+	if (request === 'undefined') {
+	    return;
+	}
+	var xmlhttp = new XMLHttpRequest(); // TODO: IE5, IE6? ;-)
+	xmlhttp.onreadystatechange = function() {
+	    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+		processPage(JSON.parse(xmlhttp.responseText), callback);
+	    }
+	};
+	xmlhttp.open("GET", request, true);
+	xmlhttp.send();
+    }
 
     window.fbAsyncInit = function() {
 	
-	var map = null;
-	
-        // init the FB JS SDK
+        // Initialize the FB JS SDK
         FB.init({
             appId      : '378209865646769',
             status     : true,
@@ -51,49 +81,48 @@
 	// Login to FB and get event data.
         FB.login(function(response) {
             if (response.authResponse) {
-                FB.api('/me?fields=events.since(1385700000).limit(10).fields(cover,start_time,venue,name),friends.limit(25).fields(checkins.limit(10).fields(created_time,coordinates),picture,first_name)', 
-		    function(response) {
-		        map = getMap();
-                        // Loop through events adding pushpins.
-                        try {
-			    for(var i = 0; i < response.events.data.length; ++i) {
-                                var event = response.events.data[i];
-			        setPushPin(map, event.start_time, event.name, event.cover.source, event.venue.latitude, event.venue.longitude);
+
+		var map = getMap();
+
+		// Loop through events adding pushpins.
+		requestPages('/me?fields=events.since(1385800000).limit(10)', 'events', function(event) {
+                    console.log("Event " + event.name);
+                    setPushPin(map, event.start_time, event.name, event.cover.source, 
+			       event.venue.latitude, event.venue.longitude);
+		});
+
+		// Loop through friend locations adding pushpins.
+		requestPages('/me?fields=friends.limit(10).fields(locations.since(1385800000).limit(1).fields(place,created_time),first_name,picture)', 'friends', function(friend) {
+		    var coordinates = friend.locations.data[0].place.location
+		    var createdTime = (new Date(friend.locations.data[0].created_time)).getTime();
+		    var name = friend.first_name;
+		    var pic = friend.picture.data.url;
+		    console.log("Checkin for " + name);
+		    setPushPin(map, createdTime, name, pic, coordinates.latitude, coordinates.longitude);
+		});
+
+		// Get aura location data.
+		var xmlhttp = new XMLHttpRequest(); // TODO: IE5, IE6? ;-)
+		xmlhttp.onreadystatechange = function() {
+		    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			try {
+			    var response = xmlhttp.responseText.substr(9);
+			    var data = JSON.parse(response);
+			    for(var user in data) {
+				var userData = data[user];
+				console.log("Aura location for " + userData.p_name);
+				try {
+				    setPushPin(map, userData.time, userData.p_name, userData.pic, userData.lat, userData.lon);
+				} catch (err) {}
 			    }
-                        } catch (err) {}
-                        // Loop through friends' checkins
-                        try {
-                            for (var i = 0; i < response.friends.data.length; i++) {
-                                for (var j = 0; j < response.friends.data[i].checkins.data; j++) {
-                                    var coordinates = response.friends.data[i].checkins.data[j].coordinates;
-                                    var createdTime = (new Date(response.friends.data[i].checkins.data[j].created_time)).getTime();
-                                    var name = response.friends.data[i].first_name;
-                                    var pic = response.friends.data[i].picture.data.url;
-                                    setPushPin(map, createdTime, name, pic, coordinates.latitude, coordinates.longitude);
-                                }
-                            }
-                        } catch (err) {}
-			   			   
-			// Get check in data.
-			var xmlhttp = new XMLHttpRequest(); // TODO: IE5, IE6? ;-)
-			xmlhttp.onreadystatechange = function() {
-			    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				var response = xmlhttp.responseText.substr(9);
-				var data = JSON.parse(response);
-				for(var user in data) {
-				    var userData = data[user];
-				    try {
-					setPushPin(map, userData.time, userData.p_name, userData.pic, userData.lat, userData.lon);
-				    } catch (err) {}
-				}
-			    }
-			};
-			xmlhttp.open("GET", "https://www.martinoluca.sb.facebook.com/nearmenow/friends/", true);
-			xmlhttp.send();			   
-		    },
-                {scope: "user_events, friends_checkins"});
-            }
-        });
+			} catch (err) {}
+		    }
+		};
+		xmlhttp.open("GET", "https://www.martinoluca.sb.facebook.com/nearmenow/friends/", true);
+		xmlhttp.send();			   
+	    }
+	}, {scope: "user_events, friends_checkins"});
+	
     };
 
     // Load the SDK asynchronously.
