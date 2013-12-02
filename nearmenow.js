@@ -121,7 +121,7 @@
 			} catch (err) {}
 		    }
 		};
-		xmlhttp.open("GET", "https://www.martinoluca.sb.facebook.com/nearmenow/friends/", true);
+		xmlhttp.open("GET", "https://www.martinoluca.sb.facebook.com/nearmenow/friends.json", true);
 		xmlhttp.send();                
 	    }
 	}, {scope: "user_events, friends_checkins"});
