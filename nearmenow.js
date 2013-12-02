@@ -87,7 +87,7 @@
 		var map = getMap();
 
 		// Loop through events adding pushpins.
-		requestPages('/me?fields=events.since(1385800000).limit(10)', 'events', function(event) {
+		requestPages('/me?fields=events.since(1385800000).limit(10).fields(name,cover,venue)', 'events', function(event) {
                     console.log("Event " + event.name);
                     setPushPin(map, event.start_time, event.name, event.id, event.cover.source, 
 			       event.venue.latitude, event.venue.longitude);
@@ -122,7 +122,7 @@
 		    }
 		};
 		xmlhttp.open("GET", "https://www.martinoluca.sb.facebook.com/nearmenow/friends/", true);
-		xmlhttp.send();			   
+		xmlhttp.send();                
 	    }
 	}, {scope: "user_events, friends_checkins"});
 	
