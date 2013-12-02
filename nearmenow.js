@@ -27,12 +27,13 @@
                     (new Date(now-startTime)).getMinutes() + " minutes ago" :
                     "In " + (new Date(startTime-now)).getMinutes() + " minutes"; 
                 var url = "https://www.facebook.com/" + id;
-                var pushpinContent = "<a href='" + url + "'><div class='pin' style='background-image:url(" + picture + ");'>" 
-                    + name + "<span>" + timestamp + "</span></div></a>";
+                var pushpinContent = "<div class='pin' style='background-image:url(" + picture + ");'>" 
+                    + name + "<span>" + timestamp + "</span></div>";
 	        var pushpinOptions =  {width: null, height: null, htmlContent: pushpinContent};
                 var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(latitude, longitude),
                     pushpinOptions
                 );
+                Microsoft.Maps.Events.addHandler(pushpin, 'dblclick', function(){window.open(url, '_blank', false);}); 
                 map.entities.push(pushpin);
             }
         } catch (err) {}   
