@@ -16,7 +16,7 @@
 	return map;
     }
 
-    function setPushPin(map, time, name, picture, latitude, longitude)
+    function setPushPin(map, time, name, id, picture, latitude, longitude)
     {
         try {
             var startTime = (new Date(time)).getTime();
@@ -26,7 +26,8 @@
                 var timestamp = (startTime < now)?
                     (new Date(now-startTime)).getMinutes() + " minutes ago" :
                     "In " + (new Date(startTime-now)).getMinutes() + " minutes"; 
-                var pushpinContent = "<a href=''><div class='pin' style='background-image:url(" + picture + ");'>" 
+                var url = "https://www.facebook.com/" + id;
+                var pushpinContent = "<a href='" + url + "'><div class='pin' style='background-image:url(" + picture + ");'>" 
                     + name + "<span>" + timestamp + "</span></div></a>";
 	        var pushpinOptions =  {width: null, height: null, htmlContent: pushpinContent};
                 var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(latitude, longitude),
@@ -87,7 +88,7 @@
 		// Loop through events adding pushpins.
 		requestPages('/me?fields=events.since(1385800000).limit(10)', 'events', function(event) {
                     console.log("Event " + event.name);
-                    setPushPin(map, event.start_time, event.name, event.cover.source, 
+                    setPushPin(map, event.start_time, event.name, event.id, event.cover.source, 
 			       event.venue.latitude, event.venue.longitude);
 		});
 
@@ -98,7 +99,7 @@
 		    var name = friend.first_name;
 		    var pic = friend.picture.data.url;
 		    console.log("Checkin for " + name);
-		    setPushPin(map, createdTime, name, pic, coordinates.latitude, coordinates.longitude);
+		    setPushPin(map, createdTime, name, friend.id, pic, coordinates.latitude, coordinates.longitude);
 		});
 
 		// Get location data.
@@ -112,7 +113,7 @@
 				var userData = data[user];
 				console.log("Aura location for " + userData.p_name);
 				try {
-				    setPushPin(map, userData.time, userData.p_name, 
+				    setPushPin(map, userData.time, userData.p_name, user, 
 					       userData.pic, userData.lat, userData.lon);
 				} catch (err) {}
 			    }
