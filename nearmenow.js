@@ -26,8 +26,8 @@
                 var timestamp = (startTime < now)?
                     (new Date(now-startTime)).getMinutes() + " minutes ago" :
                     "In " + (new Date(startTime-now)).getMinutes() + " minutes"; 
-                var pushpinContent = "<div class='pin' style='background-image:url(" + picture + ");'>" 
-                    + name + "<span>" + timestamp + "</span></div>";
+                var pushpinContent = "<a href=''><div class='pin' style='background-image:url(" + picture + ");'>" 
+                    + name + "<span>" + timestamp + "</span></div></a>";
 	        var pushpinOptions =  {width: null, height: null, htmlContent: pushpinContent};
                 var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(latitude, longitude),
                     pushpinOptions
@@ -56,7 +56,7 @@
     }
 
     function requestNextPage(request, callback) {
-	if (request === 'undefined') {
+	if (request == undefined) {
 	    return;
 	}
 	var xmlhttp = new XMLHttpRequest(); // TODO: IE5, IE6? ;-)
@@ -101,7 +101,7 @@
 		    setPushPin(map, createdTime, name, pic, coordinates.latitude, coordinates.longitude);
 		});
 
-		// Get aura location data.
+		// Get location data.
 		var xmlhttp = new XMLHttpRequest(); // TODO: IE5, IE6? ;-)
 		xmlhttp.onreadystatechange = function() {
 		    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -112,7 +112,8 @@
 				var userData = data[user];
 				console.log("Aura location for " + userData.p_name);
 				try {
-				    setPushPin(map, userData.time, userData.p_name, userData.pic, userData.lat, userData.lon);
+				    setPushPin(map, userData.time, userData.p_name, 
+					       userData.pic, userData.lat, userData.lon);
 				} catch (err) {}
 			    }
 			} catch (err) {}
