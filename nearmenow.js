@@ -22,7 +22,7 @@
             var startTime = (new Date(time)).getTime();
             var now = (new Date()).getTime();
             var time1hour = 60 * 60 * 1000;
-            if (startTime < now + time1hour) {
+            if (Math.abs(startTime - now) < time1hour) {
                 var timestamp = (startTime < now)?
                     (new Date(now-startTime)).getMinutes() + " minutes ago" :
                     "In " + (new Date(startTime-now)).getMinutes() + " minutes"; 
@@ -114,7 +114,9 @@
 				var userData = data[user];
 				console.log("Aura location for " + userData.p_name);
 				try {
-				    setPushPin(map, userData.time, userData.p_name, user, 
+                                    // userdata.time is expressed in UNIX time
+                                    // (seconds) and needs to be in ms
+				    setPushPin(map, userData.time * 1000, userData.p_name, user, 
 					       userData.pic, userData.lat, userData.lon);
 				} catch (err) {}
 			    }
