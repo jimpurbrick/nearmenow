@@ -99,7 +99,7 @@
 		    var createdTime = (new Date(friend.locations.data[0].created_time)).getTime();
 		    var name = friend.first_name;
 		    var pic = friend.picture.data.url;
-		    console.log("Checkin for " + name);
+		    console.log("Location for " + name);
 		    setPushPin(map, createdTime, name, friend.id, pic, coordinates.latitude, coordinates.longitude);
 		});
 
@@ -112,7 +112,7 @@
 			    var data = JSON.parse(response);
 			    for(var user in data) {
 				var userData = data[user];
-				console.log("Aura location for " + userData.p_name);
+				console.log("Location for " + userData.p_name);
 				try {
                                     // userdata.time is expressed in UNIX time
                                     // (seconds) and needs to be in ms
